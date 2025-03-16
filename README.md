@@ -42,15 +42,18 @@ Module 1 project for Business Analytics grad course
 
 ### Section 2 - Project Initialization
 
-1. Clickable link to your new repository (properly named):
+1. Clickable link to your new repository (properly named): [https://github.com/matthewellishanson/smart-store-Hanson](https://github.com/matthewellishanson/smart-store-Hanson)
 2. Clickable link to your new repository .gitignore:
+[https://github.com/matthewellishanson/smart-store-Hanson/blob/main/.gitignore](https://github.com/matthewellishanson/smart-store-Hanson/blob/main/requirements.txt)
 3. Clickable link to your new repository requirements.txt:
+[https://github.com/matthewellishanson/smart-store-Hanson/blob/main/requirements.txt](https://github.com/matthewellishanson/smart-store-Hanson/blob/main/requirements.txt)
 4. Clickable link to your new repository commits:
-5. What did you name your local project virtual environment (hint: .venv)
-6. Does this show up in your .gitignore so we don't commit it to GitHub (y/n):
-7. What challenges did you have setting up your .venv:
-8. What challenges did you have installing requirements:
-9. What challenges did you have with git-add-commit-push to GitHub: 
+[https://github.com/matthewellishanson/smart-store-Hanson/commits/main/requirements.txt ](https://github.com/matthewellishanson/smart-store-Hanson/commits)
+5. What did you name your local project virtual environment (hint: .venv) .venv
+6. Does this show up in your .gitignore so we don't commit it to GitHub (y/n): y
+7. What challenges did you have setting up your .venv: None
+8. What challenges did you have installing requirements: None
+9.  What challenges did you have with git-add-commit-push to GitHub: 
 
 ### Section 03 - Smart Sales Project
 
