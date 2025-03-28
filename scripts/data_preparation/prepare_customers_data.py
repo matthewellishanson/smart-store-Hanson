@@ -32,9 +32,9 @@ import sys
 import pandas as pd
 
 # for local imports, temporarily add project root to Python sys.path
-PROJECT_ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
+PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
-    sys.path.append(PROJECT_ROOT)
+    sys.path.append(str(PROJECT_ROOT))
 
 # Local application/library specific imports
 from utils.logger import logger
@@ -48,13 +48,12 @@ PREPARED_DATA_DIR: pathlib.Path = DATA_DIR.joinpath("prepared")
 # Reusable Functions
 # -------------------
 
-def load_data(file_name: str, file_path: pathlib.Path) -> pd.DataFrame:
+def load_data(file_name: str) -> pd.DataFrame:
     """
     Read a CSV file from the raw data directory and return a pandas DataFrame.
     
     Args: 
         file_name (str): The name of the CSV file to read.
-        file_path (pathlib.Path): The path to the CSV file.
     
     Returns: 
         pd.DataFrame: The data from the CSV file.
@@ -113,9 +112,9 @@ def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
 
     # Fill or drop missing values based on business rules
     # Fill missing values in 'Name' 
-    df['Name'] = df['Name'].fillna('Unknown')
+    # df['Name'] = df['Name'].fillna('Unknown')
     # Drop rows with missing values in 'CustomerID'
-    df = df.dropna(subset=['CustomerID'])
+    # df = df.dropna(subset=['CustomerID'])
     logger.info(f"{len(df)} rows after handling missing values.")
     return df
 
@@ -132,7 +131,7 @@ def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
     initial_count = len(df)
     # Add logic to remove outliers
     # For example, remove rows where a certain column is outside a valid range
-    df = df[(df['AmountSpent'] > 200) & (df['AmountSpent'] < 10000)]
+    # df = df[(df['AmountSpent'] > 200) & (df['AmountSpent'] < 10000)]
 
     removed_count = initial_count - len(df)
     logger.info(f"Removed {removed_count} outlier rows.")
@@ -154,7 +153,7 @@ def main() -> None:
     logger.info(f"utils folder: {PROJECT_ROOT.joinpath('utils')}")
 
     # Load the data
-    input_file = load_data("customers.csv", RAW_DATA_DIR)
+    input_file = "customers_data.csv"
     output_file = "customers_cleaned.csv"
 
     # Read raw data
