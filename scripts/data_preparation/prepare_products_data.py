@@ -30,7 +30,7 @@ import sys
 import pandas as pd
 
 # for local imports, temporarily add project root to Python sys.path
-PROJECT_ROOT = str(pathlib.Path(__file__).resolve().parent.parent.parent)
+PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
@@ -95,8 +95,8 @@ def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
 
     # Use unique logic to remove duplicates
     # Drop duplicates based on 'ProductID' and keep the first occurrence
-    df = df.drop_duplicates(subset=["ProductID"])
-    df.drop_duplicates(inplace=True)
+    # df = df.drop_duplicates(subset=["ProductID"])
+    # df.drop_duplicates(inplace=True)
 
     logger.info(f"Removed {initial_count - len(df)} duplicate rows")
     logger.info(f"Dataframe shape after removing duplicates: {df.shape}")
@@ -120,10 +120,10 @@ def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
     missing_by_col = df.isna().sum()
     logger.info(f"Missing values by column before handling:\n{missing_by_col}")
 
-    df['ProductName'].fillna('Unknown Product', inplace=True)
-    df['UnitPrice'].fillna(df['UnitPrice'].median(), inplace=True)
-    df['Category'].fillna(df['Category'].mode()[0], inplace=True)
-    df.dropna(subset=['ProductID'], inplace=True)  # Remove rows without product ID
+    # df['ProductName'].fillna('Unknown Product', inplace=True)
+    # df['UnitPrice'].fillna(df['UnitPrice'].median(), inplace=True)
+    # df['Category'].fillna(df['Category'].mode()[0], inplace=True)
+    # df.dropna(subset=['ProductID'], inplace=True)  # Remove rows without product ID
 
     # Log missing values by column after handling
     missing_after = df.isna().sum()
@@ -146,17 +146,17 @@ def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
     # Log initial count of rows in the DataFrame
     initial_count = len(df)
 
-    # Calculate the IQR for 'UnitPrice'
-    Q1 = df['UnitPrice'].quantile(0.25)
-    Q3 = df['UnitPrice'].quantile(0.75)
-    IQR = Q3 - Q1
+    # # Calculate the IQR for 'UnitPrice'
+    # Q1 = df['UnitPrice'].quantile(0.25)
+    # Q3 = df['UnitPrice'].quantile(0.75)
+    # IQR = Q3 - Q1
 
-    # Define lower and upper bounds for outliers
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
+    # # Define lower and upper bounds for outliers
+    # lower_bound = Q1 - 1.5 * IQR
+    # upper_bound = Q3 + 1.5 * IQR
 
     # Remove outliers
-    df = df[(df['UnitPrice'] >= lower_bound) & (df['UnitPrice'] <= upper_bound)]
+    # df = df[(df['UnitPrice'] >= lower_bound) & (df['UnitPrice'] <= upper_bound)]
 
     
     removed_count = initial_count - len(df)
@@ -178,10 +178,10 @@ def standardize_formats(df: pd.DataFrame) -> pd.DataFrame:
     logger.info(f"FUNCTION START: standardize_formats with dataframe shape={df.shape}")
     
     # Convert 'ProductName' to lowercase
-    df['ProductName'] = df['ProductName'].str.lower()
+    # df['ProductName'] = df['ProductName'].str.lower()
 
     # Convert 'Category' to title case
-    df['Category'] = df['Category'].str.title()
+    # df['Category'] = df['Category'].str.title()
 
     logger.info(f"Dataframe shape after standardizing formats: {df.shape}")
     return df
@@ -198,9 +198,9 @@ def validate_data(df: pd.DataFrame) -> None:
     """
     logger.info(f"FUNCTION START: validate_data with dataframe shape={df.shape}")
     
-    # Check for negative prices
-    if (df['UnitPrice'] < 0).any():
-        logger.warning("Warning: Negative prices found in 'UnitPrice' column.")
+    # # Check for negative prices
+    # if (df['UnitPrice'] < 0).any():
+    #     logger.warning("Warning: Negative prices found in 'UnitPrice' column.")
 
     # Check for missing values
     if df.isnull().values.any():
@@ -225,7 +225,7 @@ def main() -> None:
     logger.info(f"data / raw folder: {RAW_DATA_DIR}")
     logger.info(f"data / prepared folder: {PREPARED_DATA_DIR}")
 
-    input_file = "products.csv"
+    input_file = "products_data.csv"
     output_file = "products_cleaned.csv"
     logger.info(f"Input file: {input_file}")
     logger.info(f"Output file: {output_file}")
@@ -269,4 +269,3 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-    
