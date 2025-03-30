@@ -9,5 +9,3 @@ customerid,name,region,joindate,purchases,amountspent,state
 1008,Tony Stark,North,5/1/2020,6,1592.37,California
 1009,Jason Bourne,West,12/1/2020,4,1107.82,Illinois
 1010,Hermione Granger,East,12/9/2022,7,1923.55,Kansas
-1011,Harry Potter,East,12/9/2022,1,194.88,Indiana
-1012,John Doe,West,12/9/2022,1,11112.88,Iowa

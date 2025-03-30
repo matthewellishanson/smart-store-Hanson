@@ -46,22 +46,25 @@ PREPARED_DATA_DIR: pathlib.Path = DATA_DIR.joinpath("prepared")
 # Reusable Functions
 # -------------------
 
-def load_data(file_name: str, file_path: pathlib.Path) -> pd.DataFrame:
+def load_data(file_name: str) -> pd.DataFrame:
     """
     Read a CSV file from the raw data directory and return a pandas DataFrame.
     
     Args: 
         file_name (str): The name of the CSV file to read.
-        file_path (pathlib.Path): The path to the CSV file.
     
     Returns: 
         pd.DataFrame: The data from the CSV file.
     """
-    logger.info(f"FUNCTION START: read_raw_data with file_name={file_name}")
+    logger.info(f"FUNCTION START: load_data with file_name={file_name}")
     file_path = RAW_DATA_DIR.joinpath(file_name)
     logger.info(f"Reading data from {file_path}")
     df = pd.read_csv(file_path)
     logger.info(f"Loaded dataframe with {len(df)} rows and {len(df.columns)} columns")
+    
+    logger.info(f"Column datatypes: \n{df.dtypes}")
+    logger.info(f"Number of unique values: \n{df.nunique()}")
+    
     return df
 
 def save_data(df: pd.DataFrame, file_name: str) -> None:
@@ -95,8 +98,12 @@ def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
 
     # Use unique logic to remove duplicates
     # Drop duplicates based on 'ProductID' and keep the first occurrence
-    # df = df.drop_duplicates(subset=["ProductID"])
-    # df.drop_duplicates(inplace=True)
+    if 'productid' not in df.columns:
+        logger.error("Error: 'productid' column not found in the data!")
+        return df  # Return the unmodified DataFrame
+    
+    df = df.drop_duplicates(subset=["productid"])
+    df.drop_duplicates(inplace=True)
 
     logger.info(f"Removed {initial_count - len(df)} duplicate rows")
     logger.info(f"Dataframe shape after removing duplicates: {df.shape}")
@@ -120,10 +127,10 @@ def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
     missing_by_col = df.isna().sum()
     logger.info(f"Missing values by column before handling:\n{missing_by_col}")
 
-    # df['ProductName'].fillna('Unknown Product', inplace=True)
-    # df['UnitPrice'].fillna(df['UnitPrice'].median(), inplace=True)
-    # df['Category'].fillna(df['Category'].mode()[0], inplace=True)
-    # df.dropna(subset=['ProductID'], inplace=True)  # Remove rows without product ID
+    df['productname'].fillna('Unknown Product', inplace=True)
+    df['unitprice'].fillna(df['unitprice'].median(), inplace=True)
+    df['category'].fillna(df['category'].mode()[0], inplace=True)
+    df.dropna(subset=['productid'], inplace=True)  # Remove rows without product ID
 
     # Log missing values by column after handling
     missing_after = df.isna().sum()
@@ -231,7 +238,7 @@ def main() -> None:
     logger.info(f"Output file: {output_file}")
 
     # Read raw data
-    df = load_data(input_file, RAW_DATA_DIR)
+    df = load_data(input_file)
     logger.info(f"Initial data shape: {df.shape}")
 
     # Log initial dataframe information
