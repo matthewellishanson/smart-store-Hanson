@@ -98,11 +98,11 @@ def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
 
     # Use unique logic to remove duplicates
     # Drop duplicates based on 'ProductID' and keep the first occurrence
-    if 'productid' not in df.columns:
+    if 'ProductID' not in df.columns:
         logger.error("Error: 'productid' column not found in the data!")
         return df  # Return the unmodified DataFrame
     
-    df = df.drop_duplicates(subset=["productid"])
+    df = df.drop_duplicates(subset=["ProductID"])
     df.drop_duplicates(inplace=True)
 
     logger.info(f"Removed {initial_count - len(df)} duplicate rows")
@@ -127,10 +127,10 @@ def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
     missing_by_col = df.isna().sum()
     logger.info(f"Missing values by column before handling:\n{missing_by_col}")
 
-    df['productname'].fillna('Unknown Product', inplace=True)
-    df['unitprice'].fillna(df['unitprice'].median(), inplace=True)
-    df['category'].fillna(df['category'].mode()[0], inplace=True)
-    df.dropna(subset=['productid'], inplace=True)  # Remove rows without product ID
+    df['PRODUCTNAME'].fillna('Unknown Product', inplace=True)
+    df['UNITPRICE'].fillna(df['UNITPRICE'].median(), inplace=True)
+    df['CATEGORY'].fillna(df['CATEGORY'].mode()[0], inplace=True)
+    df.dropna(subset=['PRODUCTID'], inplace=True)  # Remove rows without product ID
 
     # Log missing values by column after handling
     missing_after = df.isna().sum()
@@ -154,16 +154,16 @@ def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
     initial_count = len(df)
 
     # # Calculate the IQR for 'UnitPrice'
-    # Q1 = df['UnitPrice'].quantile(0.25)
-    # Q3 = df['UnitPrice'].quantile(0.75)
-    # IQR = Q3 - Q1
+    Q1 = df['UNITPRICE'].quantile(0.25)
+    Q3 = df['UNITPRICE'].quantile(0.75)
+    IQR = Q3 - Q1
 
     # # Define lower and upper bounds for outliers
-    # lower_bound = Q1 - 1.5 * IQR
-    # upper_bound = Q3 + 1.5 * IQR
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
 
     # Remove outliers
-    # df = df[(df['UnitPrice'] >= lower_bound) & (df['UnitPrice'] <= upper_bound)]
+    df = df[(df['UNITPRICE'] >= lower_bound) & (df['UNITPRICE'] <= upper_bound)]
 
     
     removed_count = initial_count - len(df)
@@ -247,7 +247,7 @@ def main() -> None:
 
     # Clean column names
     original_columns = df.columns.tolist()
-    df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
+    df.columns = df.columns.str.strip().str.upper().str.replace(' ', '_')
     logger.info(f"Cleaned column names: {original_columns} -> {df.columns.tolist()}")
 
     # Log if any column names changed

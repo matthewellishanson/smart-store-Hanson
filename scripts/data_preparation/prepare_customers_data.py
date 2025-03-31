@@ -112,9 +112,9 @@ def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
 
     # Fill or drop missing values based on business rules
     # Fill missing values in 'Name' 
-    df['name'] = df['name'].fillna('Unknown')
+    df['NAME'] = df['NAME'].fillna('Unknown')
     # Drop rows with missing values in 'CustomerID'
-    df = df.dropna(subset=['customerid'])
+    df = df.dropna(subset=['CUSTOMERID'])
     logger.info(f"{len(df)} rows after handling missing values.")
     return df
 
@@ -131,7 +131,7 @@ def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
     initial_count = len(df)
     # Add logic to remove outliers
     # For example, remove rows where a certain column is outside a valid range
-    df = df[(df['amountspent'] > 200) & (df['amountspent'] < 10000)]
+    df = df[(df['AMOUNTSPENT'] > 200) & (df['AMOUNTSPENT'] < 10000)]
 
     removed_count = initial_count - len(df)
     logger.info(f"Removed {removed_count} outlier rows.")
@@ -164,7 +164,7 @@ def main() -> None:
 
     # CLean column names
     original_columns = df.columns.tolist()
-    df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
+    df.columns = df.columns.str.strip().str.upper().str.replace(' ', '_')
     logger.info(f"Cleaned column names: {original_columns} -> {df.columns.tolist()}")
 
     # Log if any column names changed
