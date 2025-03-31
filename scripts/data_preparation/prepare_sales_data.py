@@ -104,12 +104,12 @@ def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     # So we could do something like this:
     # df = df.drop_duplicates(subset=['product_code'])
 
-    if 'TRANSACTIONID' not in df.columns:
-        logger.error("Error: 'TRANSACTIONID' column not found in the data!")
+    if 'TransactionID' not in df.columns:
+        logger.error("Error: 'TransactionID' column not found in the data!")
         return df  # Return the unmodified DataFrame
 
     # Remove duplicates based on 'TransactionID' column
-    df = df.drop_duplicates(subset=['TRANSACTIONID'])
+    df = df.drop_duplicates(subset=['TransactionID'])
     
     removed_count = initial_count - len(df)
     logger.info(f"Removed {removed_count} duplicate rows")
@@ -136,8 +136,8 @@ def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
     
     # Implement appropriate missing value handling 
     # specific to our data. 
-    df['POINTSEARNED'].fillna(df['POINTSEARNED'].median(), inplace=True)
-    df['MEMBERSTATUS'].fillna('Unknown', inplace=True)
+    df['PointsEarned'].fillna(df['PointsEarned'].median(), inplace=True)
+    df['MemberStatus'].fillna('Unknown', inplace=True)
 
     # Log missing values by column after handling
     missing_after = df.isna().sum()
@@ -174,14 +174,14 @@ def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
     #         df = df[(df[col] >= lower_bound) & (df[col] <= upper_bound)]
     #         logger.info(f"Applied outlier removal to {col}: bounds [{lower_bound}, {upper_bound}]")
     
-    # Ensure POINTSEARNED is numeric
-    df['POINTSEARNED'] = pd.to_numeric(df['POINTSEARNED'], errors='coerce')
+    # Ensure PointsEarned is numeric
+    df['PointsEarned'] = pd.to_numeric(df['PointsEarned'], errors='coerce')
 
-    # Remove rows where POINTSEARNED is NaN
-    df = df.dropna(subset=['POINTSEARNED'])
+    # Remove rows where PointsEarned is NaN
+    df = df.dropna(subset=['PointsEarned'])
 
     # Apply the range filter for SaleAmount
-    df = df[(df['SALEAMOUNT'] >= 0) & (df['SALEAMOUNT'] <= 10000)]
+    df = df[(df['SaleAmount'] >= 0) & (df['SaleAmount'] <= 10000)]
 
     removed_count = initial_count - len(df)
     logger.info(f"Removed {removed_count} outlier rows")
@@ -226,20 +226,20 @@ def validate_data(df: pd.DataFrame) -> pd.DataFrame:
     # TODO: Implement data validation rules specific to products
     # Suggestion: Check for valid values in critical fields
     # Example:
-    invalid_prices = df[df['SALEAMOUNT'] < 0].shape[0]
+    invalid_prices = df[df['SaleAmount'] < 0].shape[0]
     logger.info(f"Found {invalid_prices} products with negative prices")
-    df = df[df['SALEAMOUNT'] >= 0]
+    df = df[df['SaleAmount'] >= 0]
     
-    # Ensure that POINTSEARNED is numeric
-    df['POINTSEARNED'] = pd.to_numeric(df['POINTSEARNED'], errors='coerce')
+    # Ensure that PointsEarned is numeric
+    df['PointsEarned'] = pd.to_numeric(df['PointsEarned'], errors='coerce')
     
-    # Handle rows where POINTSEARNED are negative
-    invalid_points = df[df['POINTSEARNED'] < 0].shape[0]
+    # Handle rows where PointsEarned are negative
+    invalid_points = df[df['PointsEarned'] < 0].shape[0]
     logger.info(f"Found {invalid_points} sales with negative points earned") 
 
-    # Change negative POINTSEARNED to positive and convert to integer
-    df['POINTSEARNED'] = df['POINTSEARNED'].abs()
-    df['POINTSEARNED'] = df['POINTSEARNED'].astype(int)
+    # Change negative PointsEarned to positive and convert to integer
+    df['PointsEarned'] = df['PointsEarned'].abs()
+    df['PointsEarned'] = df['PointsEarned'].astype(int)
 
     logger.info("Data validation complete")
     return df
@@ -267,7 +267,7 @@ def main() -> None:
 
     # Clean column names
     original_columns = df.columns.tolist()
-    df.columns = df.columns.str.strip().str.upper().str.replace(' ', '_')
+    df.columns = df.columns.str.strip().str.replace(' ', '_')
 
     # Log if any column names changed
     changed_columns = [f"{old} -> {new}" for old, new in zip(original_columns, df.columns) if old != new]

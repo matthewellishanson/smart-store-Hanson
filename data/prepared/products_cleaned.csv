@@ -1,4 +1,4 @@
-PRODUCTID,PRODUCTNAME,CATEGORY,UNITPRICE,QUANTITYINSTOCK,SUPPLIERNAME
+ProductID,ProductName,Category,UnitPrice,QuantityInStock,SupplierName
 102,hoodie,Clothing,39.1,100,Adidas
 103,cable,Electronics,22.76,250,Samsung
 104,hat,Clothing,43.1,200,New Era

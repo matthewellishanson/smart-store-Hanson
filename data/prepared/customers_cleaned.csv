@@ -1,4 +1,4 @@
-CUSTOMERID,NAME,REGION,JOINDATE,PURCHASES,AMOUNTSPENT,STATE
+CustomerID,Name,Region,JoinDate,Purchases,AmountSpent,State
 1001,William White,East,11/11/2021,4,1002.31,New York
 1002,Wylie Coyote,East,2/14/2023,5,1201.22,Nevada
 1003,Dan Brown,West,10/19/2023,3,801.74,California
