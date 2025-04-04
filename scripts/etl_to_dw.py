@@ -59,15 +59,24 @@ def delete_existing_records(cursor: sqlite3.Cursor) -> None:
 
 def insert_customers(customers_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
     """Insert customer data into the customer table."""
-    customers_df.to_sql("customer", cursor.connection, if_exists="append", index=False)
+    try:
+        customers_df.to_sql("customer", cursor.connection, if_exists="append", index=False)
+    except Exception as e:
+        print(f"Error inserting customer data: {e}")
 
 def insert_products(products_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
     """Insert product data into the product table."""
-    products_df.to_sql("product", cursor.connection, if_exists="append", index=False)
-
+    try:
+        products_df.to_sql("product", cursor.connection, if_exists="append", index=False)
+    except Exception as e:
+        print(f"Error inserting product data: {e}")
+    
 def insert_sales(sales_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
     """Insert sales data into the sales table."""
-    sales_df.to_sql("sale", cursor.connection, if_exists="append", index=False)
+    try:
+        sales_df.to_sql("sale", cursor.connection, if_exists="append", index=False)
+    except Exception as e:
+        print(f"Error inserting sales data: {e}")
 
 def load_data_to_db() -> None:
     try:
@@ -80,8 +89,8 @@ def load_data_to_db() -> None:
         delete_existing_records(cursor)
 
         # Load prepared data using pandas
-        customers_df = pd.read_csv(PREPARED_DATA_DIR.joinpath("customers_data_prepared.csv"))
-        products_df = pd.read_csv(PREPARED_DATA_DIR.joinpath("products_data_prepared.csv"))
+        customers_df = pd.read_csv(PREPARED_DATA_DIR.joinpath("customers_cleaned.csv"))
+        products_df = pd.read_csv(PREPARED_DATA_DIR.joinpath("products_cleaned.csv"))
         sales_df = pd.read_csv(PREPARED_DATA_DIR.joinpath("sales_data_prepared.csv"))
 
         # Insert data into the database
