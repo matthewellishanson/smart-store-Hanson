@@ -48,6 +48,7 @@ def create_schema(cursor: sqlite3.Cursor) -> None:
             sale_date TEXT,
             sale_amount REAL,
             member_status Text,
+            points_earned INTEGER,
             FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
             FOREIGN KEY (product_id) REFERENCES product (product_id)
         )
@@ -104,7 +105,8 @@ def insert_sales(sales_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
             "CampaignID": "campaign_id",
             "SaleDate": "sale_date",
             "SaleAmount": "sale_amount",
-            "MemberStatus": "member_status"
+            "MemberStatus": "member_status",
+            "PointsEarned": "points_earned"
         })
         sales_df.to_sql("sale", cursor.connection, if_exists="append", index=False)
     except Exception as e:
