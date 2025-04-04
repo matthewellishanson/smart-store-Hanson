@@ -17,37 +17,37 @@ def create_schema(cursor: sqlite3.Cursor) -> None:
     """Create tables in the data warehouse if they don't exist."""
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS customer (
-            CustomerID TEXT PRIMARY KEY,
-            Name TEXT,
-            Region TEXT,
-            JoinDate DATE,
-            Purchases INTEGER,
-            AmountSpent REAL,
-            State TEXT
+            customer_id INTEGER PRIMARY KEY,
+            name TEXT,
+            region TEXT,
+            join_date TEXT,
+            purchases INTEGER,
+            amount_spent REAL,
+            state TEXT
         )
     """)
     
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS product (
-            ProductID TEXT PRIMARY KEY,
-            ProductName TEXT,
-            Category TEXT,
-            UnitPrice REAL,
-            QuantityInStock INTEGER,
-            Supplier TEXT
+            product_id INTEGER PRIMARY KEY,
+            product_name TEXT,
+            category TEXT,
+            unit_price REAL,
+            quantity_in_stock INTEGER,
+            supplier TEXT
         )
     """)
     
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS sale (
-            TransactionID TEXT PRIMARY KEY,
-            CustomerID TEXT FOREIGN KEY,
-            ProductID TEXT FOREIGN KEY,
-            SaleDate DATE,
-            SaleAmount REAL,
-            MemberStatus Text,
-            FOREIGN KEY (CustomerID) REFERENCES customer (CustomerID),
-            FOREIGN KEY (ProductID) REFERENCES product (ProductID)
+            transaction_id INTEGER PRIMARY KEY,
+            customer_id INTEGER,
+            product_id INTEGER,
+            sale_date TEXT,
+            sale_amount REAL,
+            member_status Text,
+            FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
+            FOREIGN KEY (product_id) REFERENCES product (product_id)
         )
     """)
 
@@ -60,6 +60,16 @@ def delete_existing_records(cursor: sqlite3.Cursor) -> None:
 def insert_customers(customers_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
     """Insert customer data into the customer table."""
     try:
+        # Rename columns to match the database schema
+        customers_df = customers_df.rename(columns={
+            "CustomerID": "customer_id",
+            "Name": "name",
+            "Region": "region",
+            "JoinDate": "join_date",
+            "Purchases": "purchases",
+            "AmountSpent": "amount_spent",
+            "State": "state"
+        })
         customers_df.to_sql("customer", cursor.connection, if_exists="append", index=False)
     except Exception as e:
         print(f"Error inserting customer data: {e}")
@@ -67,6 +77,15 @@ def insert_customers(customers_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None
 def insert_products(products_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
     """Insert product data into the product table."""
     try:
+        # Rename columns to match the database schema
+        products_df = products_df.rename(columns={
+            "ProductID": "product_id",
+            "ProductName": "product_name",
+            "Category": "category",
+            "UnitPrice": "unit_price",
+            "QuantityInStock": "quantity_in_stock",
+            "Supplier": "supplier"
+        })
         products_df.to_sql("product", cursor.connection, if_exists="append", index=False)
     except Exception as e:
         print(f"Error inserting product data: {e}")
@@ -74,6 +93,15 @@ def insert_products(products_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
 def insert_sales(sales_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
     """Insert sales data into the sales table."""
     try:
+        # Rename columns to match the database schema
+        sales_df = sales_df.rename(columns={
+            "TransactionID": "transaction_id",
+            "CustomerID": "customer_id",
+            "ProductID": "product_id",
+            "SaleDate": "sale_date",
+            "SaleAmount": "sale_amount",
+            "MemberStatus": "member_status"
+        })
         sales_df.to_sql("sale", cursor.connection, if_exists="append", index=False)
     except Exception as e:
         print(f"Error inserting sales data: {e}")
