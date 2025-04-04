@@ -43,6 +43,8 @@ def create_schema(cursor: sqlite3.Cursor) -> None:
             transaction_id INTEGER PRIMARY KEY,
             customer_id INTEGER,
             product_id INTEGER,
+            store_id INTEGER,
+            campaign_id INTEGER,
             sale_date TEXT,
             sale_amount REAL,
             member_status Text,
@@ -84,7 +86,7 @@ def insert_products(products_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
             "Category": "category",
             "UnitPrice": "unit_price",
             "QuantityInStock": "quantity_in_stock",
-            "Supplier": "supplier"
+            "SupplierName": "supplier"
         })
         products_df.to_sql("product", cursor.connection, if_exists="append", index=False)
     except Exception as e:
@@ -98,6 +100,8 @@ def insert_sales(sales_df: pd.DataFrame, cursor: sqlite3.Cursor) -> None:
             "TransactionID": "transaction_id",
             "CustomerID": "customer_id",
             "ProductID": "product_id",
+            "StoreID": "store_id",
+            "CampaignID": "campaign_id",
             "SaleDate": "sale_date",
             "SaleAmount": "sale_amount",
             "MemberStatus": "member_status"
