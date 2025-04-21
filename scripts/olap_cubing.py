@@ -152,7 +152,7 @@ def create_olap_cube(
         cube = grouped.agg(metrics).reset_index()
 
         # Add a list of sale IDs for traceability
-        cube["sale_ids"] = grouped["sale_id"].apply(list).reset_index(drop=True)
+        cube["sale_ids"] = grouped["transaction_id"].apply(list).reset_index(drop=True)
 
         # Generate explicit column names
         explicit_columns = generate_column_names(dimensions, metrics)
@@ -220,8 +220,8 @@ def main():
     # Step 3: Define dimensions and metrics for the cube
     dimensions = ["DayOfWeek", "product_id", "customer_id"]
     metrics = {
-        "sale_amount_usd": ["sum", "mean"],
-        "sale_id": "count"
+        "sale_amount": ["sum", "mean"],
+        "transaction_id": "count"
     }
 
     # Step 4: Create the cube
