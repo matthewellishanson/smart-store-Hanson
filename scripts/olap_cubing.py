@@ -68,7 +68,7 @@ customer table example
 FACT TABLE:
 
 sale table example
-   sale_id,customer_id,product_id,sale_date,sale_amount_usd
+   transaction_id,customer_id,product_id,sale_date,sale_amount
    550,1001,101,2024-01-06,6344.96
    551,1002,102,2024-01-06,312.80
    552,1003,103,2024-01-16,431.00
@@ -77,7 +77,7 @@ sale table example
 THIS EXAMPLE OUTPUTS:
 
 This example assumes a cube data set with the following column names (yours will differ).
-DayOfWeek,product_id,customer_id,sale_amount_usd_sum,sale_id_count,sale_ids
+DayOfWeek,product_id,customer_id,sale_amount_sum,sale_id_count,sale_ids
 Friday,101,1001,6344.96,1,[582]
 etc.
 
@@ -218,7 +218,7 @@ def main():
     sales_df["Year"] = sales_df["sale_date"].dt.year
 
     # Step 3: Define dimensions and metrics for the cube
-    dimensions = ["DayOfWeek", "product_id", "customer_id"]
+    dimensions = ["DayOfWeek", "Month", "product_id", "customer_id"]
     metrics = {
         "sale_amount": ["sum", "mean"],
         "transaction_id": "count"
