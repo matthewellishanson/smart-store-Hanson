@@ -170,5 +170,5 @@ Sum SaleAmount for each day of the week.
 Identify the day with the lowest total revenue.
 
 ## Results
-
+![Peak Sell Times](data/results/peak_sell_times.png)
 

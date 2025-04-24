@@ -1,0 +1,26 @@
+DayOfWeek,region,supplier,sale_amount_sum
+Tuesday,East,Adidas,312.8
+Friday,East,Apple,125.6
+Tuesday,East,Microsoft,622.86
+Thursday,East,New Era,689.5999999999999
+Friday,East,Nike,138.46
+Thursday,East,Patagonia,536.16
+Wednesday,East,Samsung,182.08
+Wednesday,North,Adidas,195.5
+Wednesday,North,Microsoft,1690.6200000000001
+Friday,North,New Era,431.0
+Wednesday,North,Nike,178.02
+Thursday,North,Patagonia,1072.32
+Thursday,South,Adidas,312.8
+Thursday,South,Apple,125.6
+Wednesday,South,Microsoft,800.82
+Sunday,South,New Era,689.6
+Wednesday,South,Nike,39.56
+Thursday,South,Patagonia,1139.34
+Saturday,South,Samsung,204.84
+Thursday,West,Adidas,430.09999999999997
+Thursday,West,Apple,113.04
+Sunday,West,New Era,517.2
+Saturday,West,Nike,19.78
+Friday,West,Patagonia,469.14
+Thursday,West,Samsung,22.76

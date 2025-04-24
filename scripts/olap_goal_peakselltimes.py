@@ -62,9 +62,54 @@ def analyze_peak_sell_times(cube_df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: DataFrame with analysis results.
     """
     # Group by DayOfWeek, Region, and Supplier
-    grouped_df = cube_df.groupby(['DayOfWeek', 'Region', 'Supplier'])['sale_amount_sum'].sum().reset_index()
+    grouped_df = cube_df.groupby(['DayOfWeek', 'region', 'supplier'])['sale_amount_sum'].sum().reset_index()
     
     # Find the day with the highest total revenue for each region and supplier
-    peak_sell_times = grouped_df.loc[grouped_df.groupby(['Region', 'Supplier'])['sale_amount_sum'].idxmax()]
+    peak_sell_times = grouped_df.loc[grouped_df.groupby(['region', 'supplier'])['sale_amount_sum'].idxmax()]
     
     return peak_sell_times
+
+def visualize_peak_sell_times(peak_sell_times: pd.DataFrame) -> None:
+    """
+    Visualize peak sell times using a bar plot.
+    
+    Args:
+        peak_sell_times (pd.DataFrame): DataFrame with peak sell times.
+    """
+    plt.figure(figsize=(12, 6))
+    sns.barplot(data=peak_sell_times, x='DayOfWeek', y='sale_amount_sum', hue='region')
+    plt.title('Peak Sell Times by Region and Supplier')
+    plt.xlabel('Day of the Week')
+    plt.ylabel('Total Sale Amount')
+    plt.legend(title='Region')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    
+    # Save the plot
+    plot_path = RESULTS_OUTPUT_DIR.joinpath("peak_sell_times.png")
+    plt.savefig(plot_path)
+    logger.info(f"Peak sell times visualization saved to {plot_path}.")
+    plt.show()
+
+def main() -> None:
+    """Main function to run the analysis."""
+    try:
+        # Load the OLAP cube data
+        olap_cube_df = load_olap_cube(CUBED_FILE)
+        
+        # Analyze peak sell times
+        peak_sell_times = analyze_peak_sell_times(olap_cube_df)
+        
+        # Save the analysis results to a CSV file
+        results_path = RESULTS_OUTPUT_DIR.joinpath("peak_sell_times_analysis.csv")
+        peak_sell_times.to_csv(results_path, index=False)
+        logger.info(f"Peak sell times analysis saved to {results_path}.")
+        
+        # Visualize the results
+        visualize_peak_sell_times(peak_sell_times)
+    
+    except Exception as e:
+        logger.error(f"Error in main function: {e}")
+
+if __name__ == "__main__":
+    main()

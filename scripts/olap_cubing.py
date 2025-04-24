@@ -108,7 +108,8 @@ def ingest_sales_data_from_dw() -> pd.DataFrame:
     """Ingest sales data from SQLite data warehouse."""
     try:
         conn = sqlite3.connect(DB_PATH)
-        sales_df = pd.read_sql_query("SELECT * FROM sale", conn)
+        sales_df = pd.read_sql_query("SELECT s.sale_date, s.transaction_id, s.sale_amount, s.customer_id, s.product_id, c.region, p.supplier FROM sale s JOIN customer c ON s.customer_id = c.customer_id JOIN product p ON s.product_id = p.product_id", conn)
+        # 
         conn.close()
         logger.info("Sales data successfully loaded from SQLite data warehouse.")
         return sales_df
@@ -125,6 +126,8 @@ def create_olap_cube(
 
     Args:
         sales_df (pd.DataFrame): The sales data.
+        product_df (pd.DataFrame): The product data.
+        customers_df (pd.DataFrame): The customer data.
         dimensions (list): List of column names to group by.
         metrics (dict): Dictionary of aggregation functions for metrics.
 
@@ -147,7 +150,7 @@ def create_olap_cube(
 
         # Group by the specified dimensions
         grouped = sales_df.groupby(dimensions)
-
+        
         # Perform the aggregations
         cube = grouped.agg(metrics).reset_index()
 
@@ -210,6 +213,8 @@ def main():
 
     # Step 1: Ingest sales data
     sales_df = ingest_sales_data_from_dw()
+    # log the columns of the sales_df DataFrame
+    logger.info(f"Columns in sales_df: {sales_df.columns.tolist()}")
 
     # Step 2: Add additional columns for time-based dimensions
     sales_df["sale_date"] = pd.to_datetime(sales_df["sale_date"])
@@ -218,10 +223,10 @@ def main():
     sales_df["Year"] = sales_df["sale_date"].dt.year
 
     # Step 3: Define dimensions and metrics for the cube
-    dimensions = ["DayOfWeek", "Month", "product_id", "customer_id"]
+    dimensions = ["DayOfWeek", "Month", "product_id", "customer_id", "region", "supplier"]
     metrics = {
         "sale_amount": ["sum", "mean"],
-        "transaction_id": "count"
+        "transaction_id": "count",
     }
 
     # Step 4: Create the cube
