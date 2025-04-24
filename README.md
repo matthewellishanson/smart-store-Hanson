@@ -145,3 +145,30 @@ py scripts/etl_to_dw.py
 
 ## Results
 ![Sales By Weekday](data/results/sales_by_weekday.png)
+
+# Project 7: Custom BI Project
+
+## The Business Goal
+A comparison of peak sell times by product, supplier and region.
+
+## Data Source
+Data Warehouse constructed from etl_to_dw.py using the csv files cleaned and output by the scripts in data_preparation and data_prep.py, data_scrubber.py
+
+## Tools Used
+- Pandas
+- Matplotlib
+- Pathlib
+- Sys
+- SQLite
+- Seaborn
+- Numpy
+
+## Workflow and Logic
+Group transactions by the date of sale and customer ID.
+Average the number of sales per customer per day of the week.
+Sum SaleAmount for each day of the week.
+Identify the day with the lowest total revenue.
+
+## Results
+
+
